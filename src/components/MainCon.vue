@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 
 const text1 = ref('');
 const lenText = ref(16);
@@ -59,19 +60,51 @@ function update() {
   }
 }
 
+// 复制成功提示
+const openNotify2 = () => {
+    ElNotification({
+        type: 'success', // success | warning | info | error
+        title: '复制成功',
+        message: '',
+        duration: 1500,
+        position: 'bottom-right'
+    })
+}
+
+// 复制失败提示
+const openNotifyFail = () => {
+    ElNotification({
+        type: 'warning', // success | warning | info | error
+        title: '内容为空，复制失败',
+        message: '',
+        duration: 1500,
+        position: 'bottom-right'
+    })
+}
+
 async function copyText() {
-  try {
-    await navigator.clipboard.writeText(text1.value);
-    console.log("复制成功"); //
-  } catch (err) {
-    console.log("复制失败");
+  if(text1.value.length>0){
+    try {
+      await navigator.clipboard.writeText(text1.value);
+      // console.log("复制成功"); //
+      openNotify2();
+
+    } catch (err) {
+      console.log("复制失败");
+    }
+  }else{
+    // console.log("内容为空，复制失败");
+    openNotifyFail();
   }
+
 }
 </script>
 
 <template>
 <div class="px-5">
   <div>
+
+    <!-- 面包屑 -->
     <div class="mt-4">
       <div>
         <span>
